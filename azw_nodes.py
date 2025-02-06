@@ -10,7 +10,7 @@ cpp=print
 import torch
 from pathlib import Path
 from transformers import AutoModelForCausalLM, AutoTokenizer, AutoProcessor
-from folder_paths import models_dir
+from folder_paths import models_dir, cache_dir
 from comfy import model_management, model_patcher
 
 #
@@ -19,6 +19,7 @@ from comfy import model_management, model_patcher
 #
 deep_model_folder_path = Path(models_dir) / 'deepseek'
 deep_model_folder_path.mkdir(parents=True, exist_ok=True)
+cache_deep_model_folder_path = Path(cache_dir) / 'deepseek-ai'
 #
 #-------------
 #
@@ -46,6 +47,13 @@ class DeepLoader:
                 if config_file.is_file():
                     relative_path = str(folder.relative_to(deep_model_folder_path))
                     model_lst.append(relative_path)
+        if cache_deep_model_folder_path.exists():
+            for folder in cache_deep_model_folder_path.iterdir():
+                if folder.is_dir():
+                    config_file = folder / 'config.json'
+                    if config_file.is_file():
+                        relative_path = str(folder.relative_to(cache_deep_model_folder_path))
+                        model_lst.append(relative_path)
         return {
             "required": {
                 "model_name": (model_lst, {}),
@@ -62,6 +70,8 @@ class DeepLoader:
         offload_device = torch.device('cuda')
         load_device = model_management.get_torch_device()
         mymod=deep_model_folder_path / model_name
+        if not mymod.exists():
+            mymod=cache_deep_model_folder_path / model_name
         model = AutoModelForCausalLM.from_pretrained(
             mymod,
             #deep_model_folder_path / model_name, 
