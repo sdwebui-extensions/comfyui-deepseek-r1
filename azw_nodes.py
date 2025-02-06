@@ -9,7 +9,6 @@ cpp=print
 #
 import torch
 from pathlib import Path
-from transformers import AutoModelForCausalLM, AutoTokenizer, AutoProcessor
 from folder_paths import models_dir, cache_dir
 from comfy import model_management, model_patcher
 
@@ -66,6 +65,7 @@ class DeepLoader:
     CATEGORY = "ComfyUI-DeepSeek-R1"
 
     def load_model(self, model_name):
+        from transformers import AutoModelForCausalLM, AutoTokenizer, AutoProcessor
         #offload_device = torch.device('cpu')
         offload_device = torch.device('cuda')
         load_device = model_management.get_torch_device()
