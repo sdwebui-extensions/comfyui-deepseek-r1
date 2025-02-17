@@ -96,6 +96,7 @@ class DeepGen:
                 "deep_model": ("DEEP_MODEL",),
                 #
                 "user_prompt": ("STRING", {"default": "", "multiline": True}),
+                "system_instruction": ("STRING", {"default": "", "multiline": True}),
                 "seed": ("INT", {"default": 888, "min": 0, "max": 0xffffffffffffffff}),
                 "max_tokens": ("INT", {"default": 500, "min": 0, "max": 0xffffffffffffffff}),
                 "temperature": ("FLOAT", {"default": 1, "min": 0, "max": 2}),
@@ -111,9 +112,8 @@ class DeepGen:
     CATEGORY = "ComfyUI-DeepSeek-R1"
 
 
-    def deep_xgen(self, deep_model,  user_prompt, seed=0, temperature=1.0, max_tokens=500, top_k=50, top_p=1.0, **kwargs):
+    def deep_xgen(self, deep_model,  user_prompt, system_instruction, seed=0, temperature=1.0, max_tokens=500, top_k=50, top_p=1.0, **kwargs):
         set_seed(seed % 9999999)
-        system_instruction=''
         messages = [
             {"role": "system", "content": system_instruction},
             {"role": "user", "content": user_prompt.format(**kwargs)},
