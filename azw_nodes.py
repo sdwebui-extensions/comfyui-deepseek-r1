@@ -18,7 +18,7 @@ from comfy import model_management, model_patcher
 #
 deep_model_folder_path = Path(models_dir) / 'deepseek'
 deep_model_folder_path.mkdir(parents=True, exist_ok=True)
-cache_deep_model_folder_path = Path(cache_dir) / 'deepseek-ai'
+cache_deep_model_folder_path = Path(cache_dir) / 'models' / 'deepseek-ai'
 #
 #-------------
 #
